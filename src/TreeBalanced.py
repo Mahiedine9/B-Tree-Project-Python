@@ -183,7 +183,19 @@ class TreeBalanced:
         if not self.root:
             return False
 
-        return self._delete(self.root, key)
+        deleted = self._delete(self.root, key)
+        
+        if not self.root.keys:
+            if self.root.childs:
+                new_root = self.root.childs[0]  
+                self.root = new_root
+            else:
+                self.root = None
+            return True
+
+        
+
+        return deleted
 
     def _fill(self, parent, index):
         left_sibling = parent.childs[index - 1] if index > 0 else None
@@ -209,6 +221,7 @@ class TreeBalanced:
 
         if child.childs:
             child.childs.insert(0, left_sibling.childs.pop())
+
 
     def _rotate_left(self, parent, index):
         child = parent.childs[index]
@@ -259,11 +272,7 @@ class TreeBalanced:
                 if len(node.childs[-1].keys) < (self.degree - 1) // 2:
                     self._fill(node, len(node.childs) - 1)
                 return True 
-            
-        if not self.root.keys and self.root.childs:
-            self.root = self.root.childs[0]
-            self.root.keys = self.root.childs[0].keys
-            return True
+        
             
         return False
     
