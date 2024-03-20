@@ -179,26 +179,11 @@ class TreeBalanced:
 
 
     def delete(self, key):
+        
         if not self.root:
             return False
 
         return self._delete(self.root, key)
-
-
-
-
-    # def _delete(self, node, key):
-    #     if key in node.keys:
-    #         node.keys.remove(key)
-    #         return True
-    #
-    #     for child in node.childs:
-    #         if self._delete(child, key):
-    #             if len(child.keys) < (self.degree - 1) // 2:
-    #                 self._fill(node, node.childs.index(child))
-    #             return True
-    #
-    #     return False
 
     def _fill(self, parent, index):
         left_sibling = parent.childs[index - 1] if index > 0 else None
@@ -212,6 +197,8 @@ class TreeBalanced:
             self._merge(parent, index - 1)
         elif right_sibling:
             self._merge(parent, index)
+
+
 
     def _rotate_right(self, parent, index):
         child = parent.childs[index]
@@ -264,14 +251,23 @@ class TreeBalanced:
                         return True
                 else:
                     return False
+            
 
         if node.childs:
             deleted = self._delete(node.childs[-1], key)
             if deleted:
                 if len(node.childs[-1].keys) < (self.degree - 1) // 2:
                     self._fill(node, len(node.childs) - 1)
-                return True
+                return True 
+            
+        if not self.root.keys and self.root.childs:
+            self.root = self.root.childs[0]
+            self.root.keys = self.root.childs[0].keys
+            return True
+            
         return False
+    
+    
 
     def _get_successor(self, node, index):
         successor_node = node.childs[index + 1]
@@ -286,6 +282,7 @@ class TreeBalanced:
         self._add_nodes_and_edges(graph, self.root)
         return graph
 
+
     def _add_nodes_and_edges(self, graph, node):
         if node:
             graph.node(str(node), label=str(node.keys))
@@ -293,3 +290,9 @@ class TreeBalanced:
                 if child:
                     self._add_nodes_and_edges(graph, child)
                     graph.edge(str(node), str(child))
+
+
+
+
+
+

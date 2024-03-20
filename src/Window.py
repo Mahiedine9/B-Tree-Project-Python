@@ -56,6 +56,8 @@ class MainWindow(QMainWindow):
         if ok:
             self.tree = TreeBalanced(degree)
             self.visualize_tree()
+            
+            
 
     def add_node(self):
         if self.tree:
@@ -92,6 +94,8 @@ class MainWindow(QMainWindow):
                     self.search_result_label.setText("Node not found.")
             else:
                 self.search_result_label.setText("Operation cancelled.")
+
+
 
 
 if __name__ == "__main__":

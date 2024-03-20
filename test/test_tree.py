@@ -289,6 +289,22 @@ def test_delete_multiple_keys():
     assert tree.is_balanced(tree.root)
     
     
+ 
+def test_del(): 
+    tree = TreeBalanced(3)
+    tree.insert(2)
+    tree.insert(4)
+    tree.insert(5)
+    tree.insert(6)
+    tree.insert(8)
+    tree.insert(10)
+    tree.insert(12)
+    assert tree.root.keys == [6]
+    tree.delete(12)
+    assert tree.root.keys == [4,6]
+     
+    
+
     
   
     
