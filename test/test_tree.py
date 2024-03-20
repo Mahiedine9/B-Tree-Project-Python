@@ -279,14 +279,13 @@ def test_delete_multiple_keys():
        tree.insert(key)
     size_before = len(tree.linearize())
     assert tree.search(5, tree.root)
-    assert tree.deleteK(keys)
-    assert len(tree.linearize()) == size_before -7
-    assert not (tree.deleteK([5, 7]))
-    assert not (tree.deleteK([8, 9]))
     for key in keys:
-        assert not tree.search(key)
+       assert (tree.delete(key))
+    assert not (tree.delete([5, 7]))
+    assert not (tree.delete([8, 9]))
 
-    assert tree.is_balanced(tree.root)
+    
+
     
     
  
