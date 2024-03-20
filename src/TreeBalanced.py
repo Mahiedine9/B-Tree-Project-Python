@@ -123,6 +123,8 @@ class TreeBalanced:
             i += 1
 
         return self.search_for_insertion(key, node.childs[i])
+    
+    
 
     def insert(self, key, value=None):
         if not self.root:
@@ -132,6 +134,7 @@ class TreeBalanced:
         node = self.search_for_insertion(key, self.root)
         if node.parent is None:
             self.root = node
+            
         self.insert_in_node(node, key, value)
 
 
@@ -161,9 +164,6 @@ class TreeBalanced:
                 self.root = new_parent
                 self.root.add_child(node)
                 self.root.add_child(new_node)
-
-
-
 
 
 

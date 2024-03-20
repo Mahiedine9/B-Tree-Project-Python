@@ -133,6 +133,12 @@ donc _rotate_right() et _rotate_left() et _merge() viennent apres.
 - Test de l'affichage Window.py.
 - Exemple du cours insertion jusqu'à la clé numéro 18 réussie.
 
+### Semaine 10 : 
+#### Mercredi 20 Mars : 
+- ajout d'un test qui test un plus grand nombre de clé, comme dans le cours. 
+- mise a jour de la methode `delete`, gérer le fait de réequilibrer l'arbre si la racine est vide (0 clé). 
+- mise a jour du readme. 
+- révision de l'affichage + insertion. 
 
 
 ## UML DES CLASSES 
