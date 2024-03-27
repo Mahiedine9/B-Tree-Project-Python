@@ -149,26 +149,45 @@ class TreeBalanced:
             return self.delete(keys_or_key)
 
 
+    def deleteK(self, keys_or_key):
+        if isinstance(keys_or_key, list):
+            success = True
+            for key in keys_or_key:
+                if not self.delete(key):
+                    success = False
+            return success
+        else:
+            return self.delete(keys_or_key)
+
+
+
+
     def delete(self, key):
+        
         if not self.root:
             return False
+
         deleted = self._delete(self.root, key)
+        
         if not self.root.keys:
             if self.root.childs:
-                new_root = self.root.childs[0]
+                new_root = self.root.childs[0]  
                 self.root = new_root
             else:
                 self.root = None
             return True
+
         return deleted
+
 
 
     def _fill(self, parent, index):
         left_sibling = parent.childs[index - 1] if index > 0 else None
         right_sibling = parent.childs[index + 1] if index < len(parent.childs) - 1 else None
-        if left_sibling and len(left_sibling.keys) > (self.degree - 1) // 2:
+
+        if left_sibling and len(left_sibling.keys) > (self.degree) // 2:
             self._rotate_right(parent, index)
-        elif right_sibling and len(right_sibling.keys) > (self.degree - 1) // 2:
+        elif right_sibling and len(right_sibling.keys) > (self.degree ) // 2:
             self._rotate_left(parent, index)
         elif left_sibling:
             self._merge(parent, index - 1)
@@ -176,11 +195,14 @@ class TreeBalanced:
             self._merge(parent, index)
 
 
+
     def _rotate_right(self, parent, index):
         child = parent.childs[index]
         left_sibling = parent.childs[index - 1]
+
         child.keys.insert(0, parent.keys[index - 1])
         parent.keys[index - 1] = left_sibling.keys.pop()
+
         if child.childs:
             child.childs.insert(0, left_sibling.childs.pop())
 
@@ -188,18 +210,21 @@ class TreeBalanced:
     def _rotate_left(self, parent, index):
         child = parent.childs[index]
         right_sibling = parent.childs[index + 1]
+
         child.keys.append(parent.keys[index])
         parent.keys[index] = right_sibling.keys.pop(0)
+
         if child.childs:
             child.childs.append(right_sibling.childs.pop(0))
-
 
     def _merge(self, parent, index):
         child = parent.childs[index]
         right_sibling = parent.childs[index + 1]
+
         child.keys.append(parent.keys.pop(index))
         child.keys.extend(right_sibling.keys)
         child.childs.extend(right_sibling.childs)
+
         parent.childs.pop(index + 1)
 
 
@@ -218,18 +243,21 @@ class TreeBalanced:
                 if node.childs:
                     deleted = self._delete(node.childs[i], key)
                     if deleted:
-                        if len(node.childs[i].keys) < (self.degree - 1) // 2:
+                        if len(node.childs[i].keys) < (self.degree) // 2:
                             self._fill(node, i)
                         return True
                 else:
                     return False
+            
 
         if node.childs:
             deleted = self._delete(node.childs[-1], key)
             if deleted:
-                if len(node.childs[-1].keys) < (self.degree - 1) // 2:
+                if len(node.childs[-1].keys) < (self.degree) // 2:
                     self._fill(node, len(node.childs) - 1)
-                return True
+                return True 
+        
+            
         return False
 
 
