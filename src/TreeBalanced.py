@@ -162,13 +162,23 @@ class TreeBalanced:
             node.childs = node.childs[:middle_index + 1]
 
             if node.parent:
-                node.parent.add_child(new_node)
-                self.insert_in_node(node.parent, middle_key, value)
+                index_to_insert = 0
+                while index_to_insert < len(node.parent.keys) and middle_key > node.parent.keys[index_to_insert]:
+                    index_to_insert += 1
+
+                node.parent.keys.insert(index_to_insert, middle_key)
+                node.parent.childs.insert(index_to_insert + 1, new_node)
+                new_node.parent = node.parent
+
+                if len(node.parent.keys) > self.degree:
+                    self.insert_in_node(node.parent, node.parent.keys.pop(self.degree // 2), value)
             else:
                 new_parent = Node(middle_key)
                 self.root = new_parent
-                self.root.add_child(node)
-                self.root.add_child(new_node)
+                new_parent.childs.append(node)
+                new_parent.childs.append(new_node)
+                node.parent = new_parent
+                new_node.parent = new_parent
 
 
 
