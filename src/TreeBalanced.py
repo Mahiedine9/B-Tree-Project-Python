@@ -14,21 +14,24 @@ class TreeBalanced:
         return self.root
 
 
-    def search(self, key, node=None):
-        if not node:
-            node = self.root
-        i = 0
-        while i < len(node.keys) and key > node.keys[i]:
-            i += 1
-
-        if i < len(node.keys) and key == node.keys[i]:
-            return node
-        elif len(node.childs) > 0:
-            #print(f"Descending to child {i}")
-            return self.search(key, node.childs[i])
-        else:
-            print("Key not found")
-            return None
+    def search(self, key, node=None): 
+        if not node: 
+            node = self.root 
+            i = 0     
+            while i < len(node.keys) and key > node.keys[i]: 
+                i += 1         
+                if i < len(node.keys) and key == node.keys[i]: 
+                    return node       
+                elif len(node.childs) > 0:       
+                    for child in node.childs:     
+                        result = self.search(key, child)    
+                        if result:               
+                            return result       
+                        else:         
+                            return None
+                        
+                        
+                        
 
     def linearize(self, node=None):
         if not node:
