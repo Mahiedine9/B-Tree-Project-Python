@@ -1,6 +1,3 @@
-
- # classe qui gére les noeuds
-
 class Node:
     def __init__(self,key, value=None):
         self.keys = [key] #valeur utilisée pour comparer les noeuds
@@ -44,7 +41,3 @@ class Node:
 
     def is_leaf(self):
         return len(self.childs) == 0
-    
-    
-    
-    

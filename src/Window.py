@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
         self.search_bar = QLineEdit(self)
         self.search_bar.setPlaceholderText("Search key or value...")
         self.search_bar.textChanged.connect(self.search_in_tree)
-        
+
         self.search_result_label = QLabel(self)
 
 
@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
     def visualize_tree(self):
         if self.tree:
             graph = self.tree.visualize_tree()
-            temp_file = "temp_tree"
+            temp_file = "b_tree"
             graph.render(filename=temp_file, format='png', cleanup=True)
             pixmap = QPixmap(temp_file + '.png')
             self.scene.clear()
@@ -56,8 +56,8 @@ class MainWindow(QMainWindow):
         if ok:
             self.tree = TreeBalanced(degree)
             self.visualize_tree()
-            
-            
+
+
 
     def add_node(self):
         if self.tree:
@@ -77,12 +77,12 @@ class MainWindow(QMainWindow):
                 self.search_result_label.setText(f"Key found: {result.keys}, Value: {result.value}")
             else:
                 self.search_result_label.setText("Key not found in the tree.")
-                
+
         else:
             self.search_result_label.setText("")
 
 
-                
+
     def remove_node(self):
         if self.tree:
             key, ok = QInputDialog.getInt(self, "Delete node", "Enter the key to delete :")
