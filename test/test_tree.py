@@ -173,11 +173,11 @@ def test_insertion_list_of_keys():
     for key in keys:
         tree.insert(key)
     for key in keys:
-        assert (tree.search_for_insertion(key, tree.root)) is not None
+        assert (tree.search(key, tree.root))
     assert tree.is_balanced(tree.root)
 
 def test_789():
-    tree = TreeBalanced(3)
+    tree = TreeBalanced(2)
     tree.insert(8)
     tree.insert(9)
     tree.insert(7)
@@ -185,7 +185,7 @@ def test_789():
     
     
 def test_search_insert():
-    tree = TreeBalanced(3)
+    tree = TreeBalanced(2)
     node1 = Node(1)
     node2 = Node(2)
     node3 = Node(3)
@@ -194,7 +194,7 @@ def test_search_insert():
     
 
 def test_insert_create_new_child():
-    tree = TreeBalanced(3)
+    tree = TreeBalanced(2)
     node6 = Node(6)
     node2 = Node(2)
     node4 = Node(4)
@@ -210,7 +210,7 @@ def test_insert_create_new_child():
     
     
 def test_insert_non_empty_tree():
-    tree = TreeBalanced(3)
+    tree = TreeBalanced(2)
 
     tree.insert(5, "valeur1")
     tree.insert(3, "valeur2")
@@ -231,7 +231,7 @@ def test_insert_non_empty_tree():
     
 def test_insert_in_node_split():
     
-    tree = TreeBalanced(3)
+    tree = TreeBalanced(2)
     
     node = Node(3)
     node.keys = [1, 2]
@@ -248,7 +248,7 @@ def test_insert_in_node_split():
 
 
 def test_post_conditions():
-    tree = TreeBalanced(3)
+    tree = TreeBalanced(2)
     tree.insert(3)
     assert (tree.search_for_insertion(3, tree.root)) is not None
     size_before = len(tree.linearize())
@@ -273,7 +273,7 @@ def test_delete_single_key():
     assert tree.is_balanced(tree.root)
 
 def test_delete_multiple_keys():
-    tree = TreeBalanced(10)
+    tree = TreeBalanced(3)
     keys = [10, 5, 15, 2, 7, 12, 17]
     for key in keys:
        tree.insert(key)
@@ -290,7 +290,7 @@ def test_delete_multiple_keys():
     
  
 def test_del(): 
-    tree = TreeBalanced(3)
+    tree = TreeBalanced(2)
     tree.insert(2)
     tree.insert(4)
     tree.insert(5)
