@@ -141,6 +141,15 @@ donc _rotate_right() et _rotate_left() et _merge() viennent apres.
 - révision de l'affichage + insertion. 
 
 
+### Semaine 11 : 
+#### Mercredi 27 Mars : 
+- Amélioration de la méthode search pour plus de précisions.
+- Affichage réussi des expérimentations du cours.
+- Bonus expérimentations fonctionne correctement.
+
+
+
+
 ## UML DES CLASSES 
 
 
