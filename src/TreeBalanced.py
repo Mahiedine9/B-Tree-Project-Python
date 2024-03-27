@@ -1,5 +1,4 @@
 from graphviz import Digraph
-
 from Node import Node
 
 
@@ -9,97 +8,70 @@ class TreeBalanced:
         self.degree = degree
         self.root = None
 
-
     def get_root(self):
         return self.root
-
 
     def search(self, key, node=None):
         if not node:
             node = self.root
-        
         i = 0
         while i < len(node.keys) and key > node.keys[i]:
             i += 1
-
         if i < len(node.keys) and key == node.keys[i]:
             return node
         elif len(node.childs) > 0:
             for child in node.childs:
                 result = self.search(key, child)
                 if result:
-                    return result  
+                    return result
         else:
             return None
 
-                        
-                                               
 
     def linearize(self, node=None):
         if not node:
             node = self.root
-
         res = []
         i = 0
-
         while i < len(node.keys):
             if len(node.childs) > i:
                 res.extend(self.linearize(node.childs[i]))
-
             res.append(node.keys[i])
             i += 1
-
         if len(node.childs) > i:
             res.extend(self.linearize(node.childs[i]))
-
         return res
 
 
     def is_btree(self, node):
         if node is None:
             return True
-
         for i in range(len(node.keys) - 1):
             if node.keys[i] >= node.keys[i + 1]:
-                #print(f"Violation de la propriété de tri : {node.keys[i]} >= {node.keys[i + 1]}")
                 return False
-
         if len(node.keys) > self.degree - 1 or len(node.keys) < (self.degree // 2) - 1:
-            #print(f"Violation de la taille du nœud : {len(node.keys)}")
             return False
-
         for i in range(len(node.childs)):
             if node.childs[i] and not self.is_btree(node.childs[i]):
                 return False
-
-
-
         return True
-
 
 
     def is_balanced(self, node):
         depth = self.get_depth(node)
         if depth == -1:
             return False
-
         return True
-
 
 
     def get_depth(self, node=None):
         if not node:
             node = self.root
-
         if not node.childs:
             return 0
-
         child_depths = [self.get_depth(child) for child in node.childs]
-
         if len(set(child_depths)) != 1:
-            #print("Violation de la propriété de même profondeur")
             return -1
-
         return 1 + child_depths[0]
 
 
@@ -111,65 +83,50 @@ class TreeBalanced:
             for child in node.childs:
                 count += count_keys(child)
             return count
-
         total_nodes = len(self.linearize()) - 1
         keys_count = count_keys(self.root)
         coverage_ratio = (keys_count / total_nodes) * 100
         return coverage_ratio
 
 
-
     def search_for_insertion(self, key, node):
         if not node.childs:
             return node
-
         i = 0
         while i < len(node.keys) and key > node.keys[i]:
             i += 1
-
         return self.search_for_insertion(key, node.childs[i])
-    
-    
+
 
     def insert(self, key, value=None):
         if not self.root:
             self.root = Node(key, value)
             return
-
         node = self.search_for_insertion(key, self.root)
         if node.parent is None:
             self.root = node
-            
         self.insert_in_node(node, key, value)
-
-
 
 
     def insert_in_node(self, node, key, value=None):
         node.keys.append(key)
         node.keys.sort()
-
         if len(node.keys) > self.degree:
             middle_index = len(node.keys) // 2
             middle_key = node.keys[middle_index]
-
             new_node = Node(node.keys[middle_index + 1])
             new_node.childs = node.childs[middle_index + 1:]
             for child in new_node.childs:
                 child.parent = new_node
-
             node.keys = node.keys[:middle_index]
             node.childs = node.childs[:middle_index + 1]
-
             if node.parent:
                 index_to_insert = 0
                 while index_to_insert < len(node.parent.keys) and middle_key > node.parent.keys[index_to_insert]:
                     index_to_insert += 1
-
                 node.parent.keys.insert(index_to_insert, middle_key)
                 node.parent.childs.insert(index_to_insert + 1, new_node)
                 new_node.parent = node.parent
-
                 if len(node.parent.keys) > self.degree:
                     self.insert_in_node(node.parent, node.parent.keys.pop(self.degree // 2), value)
             else:
@@ -179,7 +136,6 @@ class TreeBalanced:
                 new_parent.childs.append(new_node)
                 node.parent = new_parent
                 new_node.parent = new_parent
-
 
 
     def deleteK(self, keys_or_key):
@@ -194,28 +150,22 @@ class TreeBalanced:
 
 
     def delete(self, key):
-        
         if not self.root:
             return False
-
         deleted = self._delete(self.root, key)
-        
         if not self.root.keys:
             if self.root.childs:
-                new_root = self.root.childs[0]  
+                new_root = self.root.childs[0]
                 self.root = new_root
             else:
                 self.root = None
             return True
-
-        
-
         return deleted
+
 
     def _fill(self, parent, index):
         left_sibling = parent.childs[index - 1] if index > 0 else None
         right_sibling = parent.childs[index + 1] if index < len(parent.childs) - 1 else None
-
         if left_sibling and len(left_sibling.keys) > (self.degree - 1) // 2:
             self._rotate_right(parent, index)
         elif right_sibling and len(right_sibling.keys) > (self.degree - 1) // 2:
@@ -226,14 +176,11 @@ class TreeBalanced:
             self._merge(parent, index)
 
 
-
     def _rotate_right(self, parent, index):
         child = parent.childs[index]
         left_sibling = parent.childs[index - 1]
-
         child.keys.insert(0, parent.keys[index - 1])
         parent.keys[index - 1] = left_sibling.keys.pop()
-
         if child.childs:
             child.childs.insert(0, left_sibling.childs.pop())
 
@@ -241,21 +188,18 @@ class TreeBalanced:
     def _rotate_left(self, parent, index):
         child = parent.childs[index]
         right_sibling = parent.childs[index + 1]
-
         child.keys.append(parent.keys[index])
         parent.keys[index] = right_sibling.keys.pop(0)
-
         if child.childs:
             child.childs.append(right_sibling.childs.pop(0))
+
 
     def _merge(self, parent, index):
         child = parent.childs[index]
         right_sibling = parent.childs[index + 1]
-
         child.keys.append(parent.keys.pop(index))
         child.keys.extend(right_sibling.keys)
         child.childs.extend(right_sibling.childs)
-
         parent.childs.pop(index + 1)
 
 
@@ -279,26 +223,21 @@ class TreeBalanced:
                         return True
                 else:
                     return False
-            
 
         if node.childs:
             deleted = self._delete(node.childs[-1], key)
             if deleted:
                 if len(node.childs[-1].keys) < (self.degree - 1) // 2:
                     self._fill(node, len(node.childs) - 1)
-                return True 
-        
-            
+                return True
         return False
-    
-    
+
 
     def _get_successor(self, node, index):
         successor_node = node.childs[index + 1]
         while successor_node.childs:
             successor_node = successor_node.childs[0]
         return successor_node.keys[0]
-
 
 
     def visualize_tree(self):
@@ -314,9 +253,3 @@ class TreeBalanced:
                 if child:
                     self._add_nodes_and_edges(graph, child)
                     graph.edge(str(node), str(child))
-
-
-
-
-
-
